@@ -3,7 +3,8 @@ import { BsStar, BsStarHalf, BsStarFill } from "react-icons/bs";
 import { IconContext } from "react-icons/lib";
 import styled from "styled-components";
 
-const Rating = ({ rate, count }) => {
+const Rating = ({ rating }) => {
+  const { rate, count } = rating;
   return (
     <RateBox>
       <IconContext.Provider value={{ color: "#FF9529" }}>

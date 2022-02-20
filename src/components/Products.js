@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { Container, Section } from "../GlobalStyles";
+import { Section } from "../GlobalStyles";
 import {
   fetchProductsRequest,
   fetchProductsSuccess,

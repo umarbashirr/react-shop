@@ -5,6 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import Rating from "../components/Rating";
 import { Section } from "../GlobalStyles";
+import { addToCart } from "../redux/cart/cartActions";
 import {
   fetchSingleProductsFailure,
   fetchSingleProductsRequest,
@@ -12,11 +13,11 @@ import {
 } from "../redux/product/productActions";
 
 const SingleProductPage = () => {
+  const dispatch = useDispatch();
   const loading = useSelector(
     (state) => state.allproducts.singleProductLoading
   );
   const { productId } = useParams();
-  const dispatch = useDispatch();
   const fetchedProduct = useSelector((state) => state.allproducts.product);
 
   const fetchProduct = async (url) => {
@@ -34,14 +35,8 @@ const SingleProductPage = () => {
     fetchProduct("https://fakestoreapi.com/products");
   }, [productId]);
 
-  const {
-    id,
-    image,
-    title,
-    description,
-    price,
-    rating: { rate, count },
-  } = fetchedProduct;
+  const { id, image, title, description, price, rating, category } =
+    fetchedProduct;
 
   if (loading) {
     return <h3>Loading...</h3>;
@@ -50,21 +45,26 @@ const SingleProductPage = () => {
   return (
     <Section>
       <BackButton to="/products">Back to Products</BackButton>
-      <Row>
-        <ImageWrapper>
-          <img src={image} alt="" />
-        </ImageWrapper>
-        <TextContent>
-          <Title>{title}</Title>
-          <Rating rate={rate} count={count} />
-          <Price>${price}</Price>
-          <Desc>{description}</Desc>
-          <div>
-            <input type="number" />
-            <button>Add to Cart</button>
-          </div>
-        </TextContent>
-      </Row>
+      {fetchedProduct && (
+        <Row>
+          <ImageWrapper>
+            <img src={image} alt={title} />
+          </ImageWrapper>
+          <TextContent>
+            <ProductCategory>{category}</ProductCategory>
+            <Title>{title}</Title>
+            {rating ? <Rating rating={rating} /> : " "}
+            <Price>${price}</Price>
+            <Desc>{description}</Desc>
+            <div>
+              <input type="number" />
+              <button onClick={() => dispatch(addToCart(fetchedProduct))}>
+                Add to Cart
+              </button>
+            </div>
+          </TextContent>
+        </Row>
+      )}
     </Section>
   );
 };
@@ -99,16 +99,29 @@ const ImageWrapper = styled.div`
 const TextContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 `;
 
-const Title = styled.h1``;
+const ProductCategory = styled.p`
+  background-color: midnightblue;
+  color: #fff;
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  align-self: flex-start;
+  font-size: 12px;
+  text-transform: capitalize;
+`;
+
+const Title = styled.h1`
+  margin-bottom: 0.5rem;
+`;
 
 const Price = styled.p`
   font-size: 1.5rem;
+  margin: 1rem 0;
 `;
 
 const Desc = styled.p`
   text-align: justify;
   line-height: 2;
+  margin-bottom: 1rem;
 `;

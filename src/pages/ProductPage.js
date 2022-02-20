@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import PageHero from "../components/PageHero";
-import { Container, Section } from "../GlobalStyles";
+import { Section } from "../GlobalStyles";
 import Products from "../components/Products";
 import { useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
 
 const ProductPage = () => {
   const productCount = useSelector(
